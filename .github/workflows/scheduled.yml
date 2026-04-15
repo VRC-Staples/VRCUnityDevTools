@@ -1,0 +1,113 @@
+---
+name: Scheduled
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: scheduled-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nightly:
+    name: Nightly Prerelease
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve package metadata
+        id: resolve
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          import pathlib
+
+          package_path = pathlib.Path('Packages/com.staples.vrc-unity-dev-tools/package.json')
+          data = json.loads(package_path.read_text(encoding='utf-8'))
+          package_name = str(data.get('name', '')).strip()
+          version = str(data.get('version', '')).strip()
+          if not package_name or not version:
+              raise SystemExit('Package metadata missing')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as fh:
+              print(f'package_name={package_name}', file=fh)
+              print(f'version={version}', file=fh)
+          PY
+
+      - name: Set filenames
+        run: |
+          echo "package_path=Packages/${{ steps.resolve.outputs.package_name }}" >> "$GITHUB_ENV"
+          echo "zip_file=${{ steps.resolve.outputs.package_name }}-nightly.zip" >> "$GITHUB_ENV"
+          echo "unitypackage_file=${{ steps.resolve.outputs.package_name }}-nightly.unitypackage" >> "$GITHUB_ENV"
+
+      - name: Create package zip
+        working-directory: ${{ env.package_path }}
+        run: zip -r "${{ github.workspace }}/${{ env.zip_file }}" .
+
+      - name: Track package meta files
+        run: find "${{ env.package_path }}" -name '*.meta' > metaList
+
+      - name: Create UnityPackage
+        uses: pCYSl5EDgo/create-unitypackage@v1.2.3
+        with:
+          package-path: ${{ env.unitypackage_file }}
+          include-files: metaList
+
+      - name: Delete nightly release if it exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if gh release view nightly >/dev/null 2>&1; then
+            gh release delete nightly --yes
+          else
+            echo "No nightly release yet."
+          fi
+
+      - name: Remove nightly tag if it exists
+        run: |
+          set -euo pipefail
+          git push origin :refs/tags/nightly || echo "nightly tag not present"
+
+      - name: Build release notes
+        run: |
+          set -euo pipefail
+          short_sha=$(git rev-parse --short HEAD)
+          commits=$(git log -5 --pretty=format:'- %s' HEAD || true)
+          if [ -z "${commits}" ]; then
+            commits='- (no recent commits yet)'
+          fi
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          {
+            printf '## Nightly prerelease refresh\n'
+            printf 'Package: %s\n' "${{ steps.resolve.outputs.package_name }}"
+            printf 'Version: %s\n' "${{ steps.resolve.outputs.version }}"
+            printf 'Source: dev @ %s\n' "${short_sha}"
+            printf 'Run URL: %s\n' "${run_url}"
+            printf '\nRecent commits:\n'
+            printf '%s\n' "${commits}"
+          } > release_notes.md
+
+      - name: Create nightly release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ env.zip_file }}
+            ${{ env.unitypackage_file }}
+            ${{ env.package_path }}/package.json
+          tag_name: nightly
+          name: nightly
+          prerelease: true
+          body_path: release_notes.md

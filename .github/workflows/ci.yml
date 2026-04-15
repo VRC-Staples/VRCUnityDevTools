@@ -1,0 +1,196 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  identity-guard:
+    name: Commit Identity Guard
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify commit metadata and trailers
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${HEAD_SHA:-}" ] || [ "${HEAD_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            echo "::error::HEAD_SHA is invalid."
+            exit 1
+          fi
+
+          if [ -z "${BASE_SHA:-}" ] || [ "${BASE_SHA}" = "0000000000000000000000000000000000000000" ]; then
+            commit_range="${HEAD_SHA}"
+          else
+            commit_range="${BASE_SHA}..${HEAD_SHA}"
+          fi
+
+          mapfile -t commits < <(git rev-list --no-merges "${commit_range}")
+
+          if [ "${#commits[@]}" -eq 0 ]; then
+            echo "No non-merge commits to validate in range ${commit_range}."
+            exit 0
+          fi
+
+          failures=0
+          for commit in "${commits[@]}"; do
+            author_name="$(git show -s --format=%an "${commit}")"
+            author_email="$(git show -s --format=%ae "${commit}")"
+            committer_name="$(git show -s --format=%cn "${commit}")"
+            committer_email="$(git show -s --format=%ce "${commit}")"
+            subject="$(git show -s --format=%s "${commit}")"
+
+            echo "Checking ${commit}: ${subject}"
+
+            for value_name in author_name author_email committer_name committer_email; do
+              value="${!value_name}"
+              if [ -z "${value}" ]; then
+                echo "::error::${commit} has empty ${value_name//_/ }."
+                failures=1
+              fi
+            done
+
+            if [ "${author_email}" != "${committer_email}" ]; then
+              echo "::warning::${commit} author email (${author_email}) differs from committer email (${committer_email})."
+            fi
+          done
+
+          if [ "${failures}" -ne 0 ]; then
+            exit 1
+          fi
+
+  lint:
+    name: Super-Linter
+    runs-on: ubuntu-latest
+    needs: [identity-guard]
+
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Super-Linter
+        uses: super-linter/super-linter/slim@v8.6.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: ${{ github.event_name != 'pull_request' }}
+          FILTER_REGEX_INCLUDE: .*(\.github|Packages/com\.staples\.vrc-unity-dev-tools|README\.md|CHANGELOG\.md|LICENSE)$
+          VALIDATE_CSHARP: false
+          VALIDATE_MARKDOWN: true
+          VALIDATE_JSON: true
+          VALIDATE_YAML: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_GITLEAKS: true
+          LINTER_RULES_PATH: .
+          YAML_CONFIG_FILE: .yamllint.yml
+          SHELLCHECK_OPTS: --exclude=SC2086 --exclude=SC2129
+
+  package-validation:
+    name: Package Validation
+    runs-on: ubuntu-latest
+    needs: [identity-guard]
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate Unity package manifest and meta files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import pathlib
+          import re
+          import subprocess
+          import sys
+
+          root = pathlib.Path('.')
+          package_manifest = root / 'Packages/com.staples.vrc-unity-dev-tools/package.json'
+          if not package_manifest.exists():
+              raise SystemExit('Missing package manifest: Packages/com.staples.vrc-unity-dev-tools/package.json')
+
+          data = json.loads(package_manifest.read_text(encoding='utf-8'))
+          required_fields = ['name', 'displayName', 'version', 'unity', 'description', 'author']
+          missing = [field for field in required_fields if field not in data]
+          if missing:
+              raise SystemExit(f'Missing package.json fields: {", ".join(missing)}')
+
+          if data['name'] != 'com.staples.vrc-unity-dev-tools':
+              raise SystemExit(f'Unexpected package name: {data["name"]}')
+
+          if not re.fullmatch(r'\d+\.\d+\.\d+', str(data['version']).strip()):
+              raise SystemExit(f'Package version must be semantic version x.y.z, got: {data["version"]}')
+
+          unity_value = str(data['unity']).strip()
+          if not re.fullmatch(r'\d{4}\.\d+', unity_value):
+              raise SystemExit(f'Unity version must look like 2022.3, got: {unity_value}')
+
+          package_meta = root / 'Packages/com.staples.vrc-unity-dev-tools/package.json.meta'
+          if not package_meta.exists():
+              raise SystemExit('Missing package manifest meta: Packages/com.staples.vrc-unity-dev-tools/package.json.meta')
+
+          tracked = subprocess.run(
+              ['git', 'ls-files'],
+              check=True,
+              capture_output=True,
+              text=True,
+          ).stdout.splitlines()
+
+          cs_files = [pathlib.Path(line) for line in tracked if line.endswith('.cs')]
+          missing_meta = []
+          for cs_file in cs_files:
+              meta_path = root / f'{cs_file.as_posix()}.meta'
+              if not meta_path.exists():
+                  missing_meta.append(cs_file.as_posix())
+
+          if missing_meta:
+              raise SystemExit('Missing .meta files for tracked C# scripts: ' + ', '.join(missing_meta))
+
+          asmdef_path = root / 'Packages/com.staples.vrc-unity-dev-tools/Editor/Staples.DevTools.Editor.asmdef'
+          asmdef = json.loads(asmdef_path.read_text(encoding='utf-8'))
+          include_platforms = asmdef.get('includePlatforms', [])
+          if include_platforms != ['Editor']:
+              raise SystemExit(f'Editor asmdef includePlatforms must be ["Editor"], got: {include_platforms}')
+
+          print('Package manifest and Unity metadata validation passed.')
+          PY

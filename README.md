@@ -1,5 +1,7 @@
 # VRC Unity Dev Tools
 
+[![CI](https://github.com/VRC-Staples/VRCUnityDevTools/actions/workflows/ci.yml/badge.svg)](https://github.com/VRC-Staples/VRCUnityDevTools/actions/workflows/ci.yml)
+
 Unity editor utilities for VRChat, packaged as `com.staples.vrc-unity-dev-tools`.
 
 ## Overview
