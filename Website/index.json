@@ -1,0 +1,37 @@
+{
+  "name": "VRC Unity Dev Tools Listing",
+  "author": "Staples",
+  "url": "https://vrc-staples.github.io/VRCUnityDevTools/index.json",
+  "id": "com.staples.vrc-unity-dev-tools.listing",
+  "packages": {
+    "com.staples.vrc-unity-dev-tools": {
+      "versions": {
+        "1.0.1": {
+          "name": "com.staples.vrc-unity-dev-tools",
+          "displayName": "VRC Unity Dev Tools",
+          "version": "1.0.1",
+          "unity": "2022.3",
+          "description": "Unity editor tools for VRChat development workflows, including project package binding inspection, local or embedded package switching, and synced expression parameter inspection.",
+          "author": {
+            "name": "Staples",
+            "url": "",
+            "email": ""
+          },
+          "vpmDependencies": {
+            "com.vrchat.avatars": ">=3.7.0"
+          },
+          "keywords": [
+            "VRChat",
+            "Unity",
+            "Editor Tools",
+            "VCC",
+            "Packages"
+          ],
+          "license": "GPL-3.0",
+          "url": "https://github.com/VRC-Staples/VRCUnityDevTools/releases/download/1.0.1/com.staples.vrc-unity-dev-tools-1.0.1.zip",
+          "zipSHA256": "TODO_PLACEHOLDER"
+        }
+      }
+    }
+  }
+}

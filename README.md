@@ -95,9 +95,17 @@ Packages/com.staples.vrc-unity-dev-tools/
 └─ LICENSE
 ```
 
-The repository currently contains this package under `Packages/com.staples.vrc-unity-dev-tools`, and the `Website` folder is present but empty.
+The repository currently contains this package under `Packages/com.staples.vrc-unity-dev-tools`, and VPM listing assets are stored in `Website/`.
 
 ## Notes
 
 - The editor menu only registers two top-level menu items from `DevToolsMenuItems.cs`, while the synced parameter inspector registers its own menu item directly from the inspector window class. See `Packages/com.staples.vrc-unity-dev-tools/Editor/DevToolsMenuItems.cs:5-17` and `Packages/com.staples.vrc-unity-dev-tools/Editor/VRC/SyncedParamInspectorWindow.cs:32-38`.
 - The package is editor-only in practice, with the asmdef limited to the `Editor` platform. See `Packages/com.staples.vrc-unity-dev-tools/Editor/Staples.DevTools.Editor.asmdef:9-10`.
+
+
+## VPM Listing (GitHub Pages)
+
+You can add this repository to VCC using:
+- VPM Listing URL: https://vrc-staples.github.io/VRCUnityDevTools/index.json
+
+Pages for this listing are generated during the Release workflow from the `Website` folder.

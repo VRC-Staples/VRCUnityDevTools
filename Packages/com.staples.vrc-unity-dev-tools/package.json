@@ -6,5 +6,16 @@
   "description": "Unity editor tools for VRChat development workflows, including project package binding inspection, local or embedded package switching, and synced expression parameter inspection.",
   "author": {
     "name": "Staples"
-  }
+  },
+  "vpmDependencies": {
+    "com.vrchat.avatars": ">=3.7.0"
+  },
+  "keywords": [
+    "VRChat",
+    "Unity",
+    "Editor Tools",
+    "VCC",
+    "Packages"
+  ],
+  "license": "GPL-3.0"
 }

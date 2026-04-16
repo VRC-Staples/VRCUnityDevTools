@@ -1,0 +1,81 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"></stop>
+      <stop offset="100%" stop-color="#1e293b"></stop>
+    </linearGradient>
+
+    <linearGradient id="accentGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22c55e"></stop>
+      <stop offset="100%" stop-color="#38bdf8"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="320" fill="url(#bgGradient)" rx="16"></rect>
+
+  <!-- Accent -->
+  <rect x="0" y="300" width="1200" height="6" fill="url(#accentGradient)"></rect>
+
+  <!-- Text -->
+  <text x="60" y="120" font-family="Segoe UI, Inter, Arial" font-size="46" font-weight="700" fill="#f8fafc">
+    Avatar Settings Manager – Lite
+  </text>
+
+  <text x="60" y="165" font-family="Segoe UI, Inter, Arial" font-size="22" fill="#cbd5f5">
+    Lightweight VRC Avatar Settings Manager
+  </text>
+
+  <text x="60" y="205" font-family="Segoe UI, Inter, Arial" font-size="18" fill="#94a3b8">
+    Fully Self-Contained in a Single Avatar Prefab
+  </text>
+
+  <text x="60" y="235" font-family="Segoe UI, Inter, Arial" font-size="18" fill="#94a3b8">
+    Quest Compatible • No External Dependencies (OSC)
+  </text>
+
+  <!-- ICONS (24px GRID, VRCHAT SEMANTIC) -->
+  <g transform="translate(820,90) scale(3)" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- PREFAB CUBE -->
+    <g transform="translate(0,0)">
+      <polygon points="12,2 20,6 12,10 4,6"></polygon>
+      <polygon points="4,6 12,10 12,20 4,16"></polygon>
+      <polygon points="20,6 12,10 12,20 20,16"></polygon>
+    </g>
+
+    <!-- PARAMETERS (SLIDERS) -->
+    <g transform="translate(32,0)">
+      <line x1="4" y1="6" x2="20" y2="6"></line>
+      <circle cx="10" cy="6" r="2"></circle>
+
+      <line x1="4" y1="12" x2="20" y2="12"></line>
+      <circle cx="14" cy="12" r="2"></circle>
+
+      <line x1="4" y1="18" x2="20" y2="18"></line>
+      <circle cx="8" cy="18" r="2"></circle>
+    </g>
+
+    <!-- ANIMATOR / LOGIC -->
+    <g transform="translate(64,0)">
+      <!-- nodes -->
+      <circle cx="6" cy="6" r="2"></circle>
+      <circle cx="18" cy="6" r="2"></circle>
+      <circle cx="12" cy="18" r="2"></circle>
+
+      <!-- connections -->
+      <line x1="8" y1="6" x2="16" y2="6"></line>
+      <line x1="7" y1="8" x2="11" y2="16"></line>
+      <line x1="17" y1="8" x2="13" y2="16"></line>
+    </g>
+
+  </g>
+
+  <!-- Subtle Grid -->
+  <g opacity="0.04">
+    <path d="M0 60 H1200 M0 120 H1200 M0 180 H1200 M0 240 H1200 M0 300 H1200" stroke="#ffffff"></path>
+    <path d="M100 0 V320 M200 0 V320 M300 0 V320 M400 0 V320 M500 0 V320 M600 0 V320 M700 0 V320 M800 0 V320 M900 0 V320 M1000 0 V320 M1100 0 V320" stroke="#ffffff"></path>
+  </g>
+
+</svg>
