@@ -20,15 +20,15 @@
 
   <!-- Text -->
   <text x="60" y="120" font-family="Segoe UI, Inter, Arial" font-size="46" font-weight="700" fill="#f8fafc">
-    Avatar Settings Manager – Lite
+    VRC Unity Dev Tools
   </text>
 
   <text x="60" y="165" font-family="Segoe UI, Inter, Arial" font-size="22" fill="#cbd5f5">
-    Lightweight VRC Avatar Settings Manager
+    Tools for VRChat project package bindings and synced parameters
   </text>
 
   <text x="60" y="205" font-family="Segoe UI, Inter, Arial" font-size="18" fill="#94a3b8">
-    Fully Self-Contained in a Single Avatar Prefab
+    Inspect and switch project package bindings from inside Unity
   </text>
 
   <text x="60" y="235" font-family="Segoe UI, Inter, Arial" font-size="18" fill="#94a3b8">
