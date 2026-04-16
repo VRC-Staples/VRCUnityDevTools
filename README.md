@@ -106,6 +106,6 @@ The repository currently contains this package under `Packages/com.staples.vrc-u
 ## VPM Listing (GitHub Pages)
 
 You can add this repository to VCC using:
-- VPM Listing URL: https://vrc-staples.github.io/VRCUnityDevTools/index.json
+- VPM Listing URL: <https://vrc-staples.github.io/VRCUnityDevTools/index.json>
 
 Website assets are stored under `Website/` and generated during release.
