@@ -1,0 +1,27 @@
+{
+  "name": "VRC Unity Dev Tools Listing",
+  "id": "com.staples.vrc-unity-dev-tools.listing",
+  "author": {
+    "name": "Staples",
+    "url": "https://github.com/VRC-Staples/VRCUnityDevTools",
+    "email": ""
+  },
+  "url": "https://vrc-staples.github.io/VRCUnityDevTools/index.json",
+  "description": "Tools for VRChat package discovery and project workflow utilities",
+  "bannerUrl": "banner.svg",
+  "githubRepos": [
+    "VRC-Staples/VRCUnityDevTools"
+  ],
+  "packages": [
+    {
+      "id": "com.staples.vrc-unity-dev-tools",
+      "releases": [
+        "https://github.com/VRC-Staples/VRCUnityDevTools/releases/download/1.0.1/com.staples.vrc-unity-dev-tools-1.0.1.zip"
+      ]
+    }
+  ],
+  "infoLink": {
+    "text": "GitHub",
+    "url": "https://github.com/VRC-Staples/VRCUnityDevTools"
+  }
+}
