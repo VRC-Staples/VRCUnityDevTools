@@ -394,6 +394,7 @@ jobs:
           --root ${{ env.path_to_ci }}
           --list-publish-directory $GITHUB_WORKSPACE/${{ env.list_publish_directory }}
           --current-package-name ${{ env.package_name }}
+          --source-filename "${{ github.workspace }}/source.json"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
