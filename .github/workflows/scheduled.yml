@@ -101,7 +101,7 @@ jobs:
           } > release_notes.md
 
       - name: Create nightly release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             ${{ env.zip_file }}
