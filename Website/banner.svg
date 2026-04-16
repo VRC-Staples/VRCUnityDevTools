@@ -23,16 +23,8 @@
     VRC Unity Dev Tools
   </text>
 
-  <text x="60" y="165" font-family="Segoe UI, Inter, Arial" font-size="22" fill="#cbd5f5">
-    Tools for VRChat project package bindings and synced parameters
-  </text>
-
-  <text x="60" y="205" font-family="Segoe UI, Inter, Arial" font-size="18" fill="#94a3b8">
-    Inspect and switch project package bindings from inside Unity
-  </text>
-
-  <text x="60" y="235" font-family="Segoe UI, Inter, Arial" font-size="18" fill="#94a3b8">
-    Lightweight tooling for fast package diagnostics and binding workflows
+  <text x="60" y="185" font-family="Segoe UI, Inter, Arial" font-size="22" fill="#cbd5f5">
+    Miscellaneous development assistance tools
   </text>
 
   <!-- ICONS (24px GRID, VRCHAT SEMANTIC) -->
