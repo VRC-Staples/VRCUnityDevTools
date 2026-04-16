@@ -267,6 +267,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      zip_sha256: ${{ steps.compute_zip_hash.outputs.zip_sha256 }}
     env:
       package_name: ${{ needs.setup.outputs.package_name }}
       package_path: Packages/${{ needs.setup.outputs.package_name }}
@@ -285,6 +287,19 @@ jobs:
       - name: Create package zip
         working-directory: ${{ env.package_path }}
         run: zip -r "${{ github.workspace }}/${{ env.zip_file }}" .
+      - name: Compute package zip SHA256
+        id: compute_zip_hash
+        run: |
+          set -euo pipefail
+          ZIP_FILE="${{ github.workspace }}/${{ env.zip_file }}"
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "::error::Release zip not found at $ZIP_FILE"
+            ls -la "$GITHUB_WORKSPACE"
+            exit 1
+          fi
+          ZIP_SHA256=$(sha256sum "$ZIP_FILE" | awk '{print $1}')
+          echo "zip_sha256=$ZIP_SHA256" >> "$GITHUB_OUTPUT"
+
 
       - name: Track package meta files
         run: find "${{ env.package_path }}/" -name '*.meta' > metaList
@@ -381,6 +396,37 @@ jobs:
           --current-package-name ${{ env.package_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stamp zipSHA256 into listing
+        if: needs.build.outputs.zip_sha256 != ''
+        env:
+          VERSION: ${{ needs.setup.outputs.version }}
+          HASH: ${{ needs.build.outputs.zip_sha256 }}
+          PACKAGE_NAME: ${{ needs.setup.outputs.package_name }}
+          LISTING_PATH: ${{ github.workspace }}/Website/index.json
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path(os.environ['LISTING_PATH'])
+          if not path.exists():
+              raise SystemExit(f"Listing file not found: {path}")
+          data = json.loads(path.read_text(encoding='utf-8'))
+          package_name = os.environ['PACKAGE_NAME']
+          version = os.environ['VERSION']
+          hash_value = os.environ['HASH']
+          package_entry = data.get('packages', {}).get(package_name)
+          if package_entry is None:
+              raise SystemExit(f"Package entry '{package_name}' missing from listing")
+          version_entry = package_entry.get('versions', {}).get(version)
+          if not version_entry:
+              raise SystemExit(f"Version {version} missing from listing for package {package_name}")
+          version_entry['zipSHA256'] = hash_value
+          path.write_text(json.dumps(data, indent=2) + '\n', encoding='utf-8')
+          PY
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
