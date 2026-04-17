@@ -6,7 +6,10 @@ Unity editor utilities for VRChat, packaged as `com.staples.vrc-unity-dev-tools`
 
 ## Overview
 
-VRC Unity Dev Tools is an **editor-only** Unity package that helps with common VRChat development workflow tasks, including package binding inspection, local/embedded package switching, and synced avatar expression parameter debugging.
+VRC Unity Dev Tools is an **editor-only** Unity package that helps with common
+VRChat development workflow tasks, including package binding inspection,
+local/embedded package switching, and synced avatar expression
+parameter debugging.
 
 ## Included Tools
 
