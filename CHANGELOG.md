@@ -6,11 +6,15 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) an
 
 ## [Unreleased]
 
+## [1.0.1]
+
 ### Added
 
 - README and package usage documentation updates are now tracked in release notes.
   - [`f51b91b`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/f51b91b503b445462755533382f519f25f7289eb)
   - [`630b68c`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/630b68cac1632c06964277737c192343140b28cc)
+- Included VPM listing URL as a markdown link in README documentation.
+  - [`fda250e`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/fda250e3f89f7f7c6dc1de8a3fcb9f7bf3f3d3f2)
 
 ### Changed
 
@@ -26,11 +30,6 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) an
 - Refined and updated VPM page banner copy.
   - [`1be7356`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/1be7356f795cf9aeab60686d7d107ec7ce03d13ea)
   - [`27c0e7f`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/27c0e7f795cf9aeab60686d7d107ec7ce03d13ea)
-
-## [1.0.1]
-
-- Included VPM listing URL as a markdown link in README documentation.
-  - [`fda250e`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/fda250e3f89f7f7c6dc1de8a3fcb9f7bf3f3d3f2)
 
 ## [1.0.0]
 
