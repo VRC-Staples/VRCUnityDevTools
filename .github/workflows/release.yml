@@ -381,7 +381,7 @@ jobs:
           clean: false
 
       - name: Restore cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ env.path_to_ci }}/.nuke/temp
