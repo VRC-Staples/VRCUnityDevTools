@@ -2,14 +2,14 @@
 
 [![CI](https://github.com/VRC-Staples/VRCUnityDevTools/actions/workflows/ci.yml/badge.svg)](https://github.com/VRC-Staples/VRCUnityDevTools/actions/workflows/ci.yml)
 
-Unity editor utilities for VRChat, packaged as `com.staples.vrc-unity-dev-tools`.
+Unity editor utilities for VRChat, packaged as `com.staples.vrc-unity-dev-tools` (current version `1.0.2`).
 
 ## Overview
 
 VRC Unity Dev Tools is an **editor-only** Unity package that helps with common
 VRChat development workflow tasks, including package binding inspection,
-local/embedded package switching, and synced avatar expression
-parameter debugging.
+local/embedded package switching, synced avatar expression
+parameter debugging, and avatar light cleanup for dark-mode scene prep.
 
 ## Included Tools
 
@@ -55,6 +55,18 @@ Shows network-synced expression parameter details for the selected `VRCAvatarDes
 
 It can auto-select a descriptor when you select any child of an avatar in the scene.
 
+### Dark Mode
+
+**Menu:** `Tools/.Staples./Dev Tools/Dark Mode`
+
+Opens an editor window for the selected `VRCAvatarDescriptor` that scans for removable light entries and lets you apply only the rows you keep selected:
+
+- non-baked scene `Light` components under the avatar hierarchy
+- VRCFury haptic socket components with `addLight` enabled
+- VRCFury haptic plug components with `addDpsTipLight` enabled
+
+When applied, the tool removes dynamic scene lights, disables supported VRCFury-generated light settings, and records the change through Unity undo operations.
+
 ## Requirements
 
 - Unity 2022.3 (as defined in `package.json`)
@@ -90,6 +102,7 @@ Packages/com.staples.vrc-unity-dev-tools/
 │  ├─ VccPackageSwitcherWindow.cs
 │  ├─ Staples.DevTools.Editor.asmdef
 │  └─ VRC/
+│     ├─ DarkModeTool.cs
 │     └─ SyncedParamInspectorWindow.cs
 ├─ package.json
 ├─ README.md
@@ -99,7 +112,7 @@ Packages/com.staples.vrc-unity-dev-tools/
 
 ## Notes
 
-- The package menu currently exposes two top-level menu items from `DevToolsMenuItems.cs`; the synced parameter inspector registers its own menu entry.
+- The package menu exposes two top-level menu items from `DevToolsMenuItems.cs`; the synced parameter inspector and dark mode tools each register their own menu entries.
 - The repo ships with no runtime/gameplay code; this is strictly editor tooling.
 
 ## CI / Validation

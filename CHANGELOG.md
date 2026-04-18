@@ -6,6 +6,21 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) an
 
 ## [Unreleased]
 
+## [1.0.2]
+
+### Added
+
+- Added a new Dark Mode editor tool for avatar light cleanup workflows.
+  - Scans the selected `VRCAvatarDescriptor` for removable dynamic scene lights.
+  - Detects supported VRCFury haptic socket and DPS tip light settings and lets you disable only the selected entries.
+  - Applies changes with Unity undo support so avatar edits can be reverted from the editor.
+  - [`f3cb59a`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/f3cb59a)
+
+### Changed
+
+- Bumped the Unity package version to `1.0.2` for the latest release.
+  - [`ff7b0ed`](https://github.com/VRC-Staples/VRCUnityDevTools/commit/ff7b0ed)
+
 ## [1.0.1]
 
 ### Added
@@ -43,6 +58,7 @@ Initial standalone release of VRC Unity Dev Tools.
 - Added a local or embedded package switcher for VCC-style package workflows across discovered VRChat projects.
 - Added a synced expression parameter inspector for reviewing which avatar parameters are actually network synced and how much sync they use.
 
-[Unreleased]: https://github.com/VRC-Staples/VRCUnityDevTools/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/VRC-Staples/VRCUnityDevTools/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/VRC-Staples/VRCUnityDevTools/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/VRC-Staples/VRCUnityDevTools/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/VRC-Staples/VRCUnityDevTools/releases/tag/v1.0.0
