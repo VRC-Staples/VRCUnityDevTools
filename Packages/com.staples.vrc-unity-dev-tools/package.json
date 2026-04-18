@@ -1,7 +1,7 @@
 {
   "name": "com.staples.vrc-unity-dev-tools",
   "displayName": "VRC Unity Dev Tools",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "unity": "2022.3",
   "description": "Unity editor tools for VRChat development workflows, including project package binding inspection, local or embedded package switching, and synced expression parameter inspection.",
   "author": {
