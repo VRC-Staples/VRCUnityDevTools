@@ -32,7 +32,7 @@ jobs:
       IS_HOTFIX: "${{ inputs.hotfix || 'false' }}"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Resolve package metadata
         id: resolve
@@ -275,7 +275,7 @@ jobs:
       release_version: ${{ needs.setup.outputs.version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -369,12 +369,12 @@ jobs:
       path_to_ci: ci
     steps:
       - name: Checkout local repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Checkout automation repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: vrchat-community/package-list-action
           path: ${{ env.path_to_ci }}
