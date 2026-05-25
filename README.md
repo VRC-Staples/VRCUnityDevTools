@@ -9,7 +9,8 @@ Unity editor utilities for VRChat, packaged as `com.staples.vrc-unity-dev-tools`
 VRC Unity Dev Tools is an **editor-only** Unity package that helps with common
 VRChat development workflow tasks, including package binding inspection,
 local/embedded package switching, synced avatar expression
-parameter debugging, and avatar light cleanup for dark-mode scene prep.
+parameter debugging, avatar PhysBone grab/pose state cleanup, and avatar light
+cleanup for dark-mode scene prep.
 
 ## Included Tools
 
@@ -55,6 +56,20 @@ Shows network-synced expression parameter details for the selected `VRCAvatarDes
 
 It can auto-select a descriptor when you select any child of an avatar in the scene.
 
+### PhysBone Grab & Pose
+
+**Menu:** `Tools/.Staples./Dev Tools/PhysBone Grab & Pose`
+
+Opens an editor window for the selected `VRCAvatarDescriptor` that scans for
+`VRCPhysBone` components under the avatar hierarchy and lets you apply a target
+state to selected rows:
+
+- Grab: leave unchanged, enabled, or disabled
+- Pose: leave unchanged, enabled, or disabled
+
+The tool records changes through Unity undo operations and preserves prefab
+instance overrides.
+
 ### Dark Mode
 
 **Menu:** `Tools/.Staples./Dev Tools/Dark Mode`
@@ -74,6 +89,7 @@ When applied, the tool removes dynamic scene lights, disables supported VRCFury-
   - `VRC.SDKBase`
   - `VRC.SDK3A`
   - `VRC.SDK3A.Editor`
+  - `VRC.SDK3.Dynamics.PhysBone`
 - Editor-only usage (`includePlatforms`: `Editor`)
 
 ## Installation and Distribution
@@ -103,6 +119,7 @@ Packages/com.staples.vrc-unity-dev-tools/
 │  ├─ Staples.DevTools.Editor.asmdef
 │  └─ VRC/
 │     ├─ DarkModeTool.cs
+│     ├─ PhysBoneGrabPoseTool.cs
 │     └─ SyncedParamInspectorWindow.cs
 ├─ package.json
 ├─ README.md
